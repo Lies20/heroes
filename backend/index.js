@@ -75,3 +75,14 @@ app.get('/heroes/:slug', function(req, res, next){
         res.json(heroes)
     })
 })
+
+app.get('/heroes/:slug/powers',function(req, res, next){
+    const slug = req.params.slug
+    console.log("console.log de slug",slug)
+    HeroesModel.find({slug}).exec().then((resultat)=>{
+        console.log(resultat.power)
+        res.json(resultat[0].power)
+        
+    })
+    
+})
