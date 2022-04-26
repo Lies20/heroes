@@ -70,7 +70,7 @@ app.get('/heroes', async function (req, res, next ){
 app.get('/heroes/:slug', function(req, res, next){
     const slug = req.params.slug
     console.log('console log de slug',slug)
-    const heroes = HeroesModel.find({slug}).exec().then((heroes)=>{
+    HeroesModel.find({slug}).exec().then((heroes)=>{
         console.log("console log de something",heroes)
         res.json(heroes)
     })
@@ -85,4 +85,22 @@ app.get('/heroes/:slug/powers',function(req, res, next){
         
     })
     
+})
+
+app.post('/heroes',function(req, res, next){
+    console.log(req.body)
+    HeroesModel.insertMany([{
+         slug : "superman",
+         name :"superman",
+         power :["fire"],
+         color :"yellow",
+         isAlive : true,
+         age : 4000000,
+         image : "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.seekpng.com%2Fipng%2Fu2w7r5w7y3r5e6q8_naruto-shippuuden-fond-dcran-entitled-minato-yondaime-hokage%2F&psig=AOvVaw2VChXDzTZKMyKy-NO5MQpd&ust=1651071078824000&source=images&cd=vfe&ved=0CAwQjRxqFwoTCKCB6pv9sfcCFQAAAAAdAAAAABAD"
+    }])
+    res.status(201).json({
+        message:"héros ajouté ! "
+    })
+
+
 })
