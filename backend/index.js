@@ -87,7 +87,7 @@ app.get('/heroes/:slug/powers', function (req, res, next) {
 
 })
 
-app.post('/heroes', function (req, res, next) {
+app.post('/heroes',chekUser ,function (req, res, next) {
     console.log(req.body)
     HeroesModel.insertMany([{
         slug: "superman",
@@ -106,13 +106,26 @@ app.post('/heroes', function (req, res, next) {
 app.put('/heroes/:slug/powers', function (req, res, next) {
     const slug = req.params.slug
     console.log(req.body)
-    HeroesModel.updateOne({ slug }, { $set: { power: "grappeling" } }).then(result=>{
+    HeroesModel.updateOne({ slug }, { $set: { power: "grappeling" } }).then(result => {
+        console.log(result)
+        HeroesModel.findOne({ slug }).then(result => {
             console.log(result)
-            HeroesModel.findOne({slug}).then(result=>{
-                console.log(result)
-            })
+        })
     })
     res.status(201).json({
         message: "power ajouté"
     })
 })
+
+function chekUser(req, res, next){
+    HeroesModel.find({name:req.body.name}).then(result=>{
+        console.log(result)
+        if(result.length == 0 ){
+            next()
+        }else{
+            res.json({
+                message : "already exist"
+            })
+        }
+    })
+}
